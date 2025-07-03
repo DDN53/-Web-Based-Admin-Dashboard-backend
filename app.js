@@ -16,10 +16,15 @@ mongoose.connect(process.env.MONGO_URI, {
 })
 .then(() => console.log("✅ MongoDB Connected"))
 .catch((err) => console.log("❌ MongoDB connection error:", err));
-
+const authenticateToken = require('./middleware/authMiddleware');
 // Routes
 const customerRoutes = require('./routes/customerRoutes');
-app.use('/api/customers', customerRoutes);
+app.use('/api/customers', authenticateToken, customerRoutes);
+const authRoutes = require('./routes/authRoutes');
+app.use('/api/auth', authRoutes);
+const bookingRoutes = require('./routes/bookingRoutes');
+app.use('/api/bookings', bookingRoutes);
+
 
 // Start Server
 const PORT = process.env.PORT || 5001;
